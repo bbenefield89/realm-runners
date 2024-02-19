@@ -92,20 +92,6 @@ func handle_reset_swinging_attack_state(delta: float):
 		curr_swinging_attack_state = SwingingAttackStates.IDLE
 
 
-func _on_aggro_range_body_entered(body: Node2D) -> void:
-	if check_if_is_player(body):
-		Player = body
-		curr_movement_state = MovementStates.CHASING
-
-
-func _on_aggro_range_body_exited(body: Node2D) -> void:
-	if check_if_is_player(body):
-		curr_movement_state = MovementStates.IDLE
-
-
-func check_if_is_player(body: Node2D) -> bool:
-	return true if (body.name as String).to_lower() == "player" else false
-
 
 
 

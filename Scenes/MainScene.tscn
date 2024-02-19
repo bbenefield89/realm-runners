@@ -6,7 +6,13 @@
 [node name="MainScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_mop1v")]
-position = Vector2(130, 108)
+position = Vector2(186, 114)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(178, 110)
+position = Vector2(103, 92)
+
+[node name="Goblin_1" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(274, 83)
+
+[node name="Goblin_2" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(192, 200)

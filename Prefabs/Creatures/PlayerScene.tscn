@@ -1,9 +1,15 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7asklokn48k2"]
+[gd_scene load_steps=17 format=3 uid="uid://c7asklokn48k2"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
 [ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="2_evd7d"]
+[ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_61y5n"]
 [ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/IronSwordScene.tscn" id="4_rkwbu"]
+
+[sub_resource type="Resource" id="Resource_b272u"]
+script = ExtResource("3_61y5n")
+max_health = 10
+curr_health = 10
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0mff7"]
 size = Vector2(10, 8)
@@ -81,6 +87,7 @@ animations = [{
 script = ExtResource("2_5dl5e")
 WeaponCenterRef = NodePath("WeaponCenterRef")
 max_weap_dist_from_center_point = 20
+stats = SubResource("Resource_b272u")
 movement_speed = 100
 
 [node name="BodyCollisionShape" parent="." index="0"]

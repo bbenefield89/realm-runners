@@ -2,10 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://bx6byxx416lxd" path="res://Prefabs/Creatures/Enemies/EnemySmallScene.tscn" id="1_x1c0s"]
 [ext_resource type="Script" path="res://Scripts/Creatures/Enemies/GoblinController.gd" id="2_ulcuw"]
+[ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_3xkvo"]
 [ext_resource type="PackedScene" uid="uid://dngfpjp7naisq" path="res://Prefabs/Weapons/WoodAxeScene.tscn" id="3_48em3"]
 [ext_resource type="Texture2D" uid="uid://dxb7ljqvcv01y" path="res://Tilesets/dungeonSprites_ v1.5/goblin_.png" id="3_hugt8"]
-[ext_resource type="Script" path="res://Scripts/Stats/StatsController.gd" id="5_hjdol"]
-[ext_resource type="Script" path="res://Scripts/Stats/HealthController.gd" id="6_0neeo"]
+
+[sub_resource type="Resource" id="Resource_wcpp8"]
+script = ExtResource("3_3xkvo")
+max_health = 1
+curr_health = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ysb86"]
 atlas = ExtResource("3_hugt8")
@@ -147,25 +151,17 @@ script = ExtResource("2_ulcuw")
 swinging_attack_charging_up_speed = 0.0
 max_swinging_attack_charging_up_rotation = 0.0
 max_swinging_attack_release_rotation = 0.0
+stats = SubResource("Resource_wcpp8")
 
 [node name="BodySprite" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_544gu")
-animation = &"death"
+animation = &"idle"
 
 [node name="Equipment" parent="." index="2" node_paths=PackedStringArray("Weapon")]
 Weapon = NodePath("WoodAxe_0")
 
 [node name="WoodAxe_0" parent="Equipment" index="0" instance=ExtResource("3_48em3")]
 position = Vector2(8, 0)
-
-[node name="Stats" type="Node2D" parent="." index="3" node_paths=PackedStringArray("Health")]
-script = ExtResource("5_hjdol")
-Health = NodePath("Health")
-
-[node name="Health" type="Node2D" parent="Stats" index="0"]
-script = ExtResource("6_0neeo")
-max_health = 1
-curr_health = 1
 
 [node name="Right" parent="WeaponRefPoints" index="0"]
 position = Vector2(8, 0)
