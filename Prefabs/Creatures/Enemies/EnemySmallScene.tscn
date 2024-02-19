@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bx6byxx416lxd"]
+
+[ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_f8q2g"]
+[ext_resource type="Script" path="res://Scripts/Creatures/Enemies/EnemyController.gd" id="2_xhvld"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wgetr"]
+size = Vector2(10, 8)
+
+[node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
+script = ExtResource("2_xhvld")
+WeaponRefPointRight = NodePath("WeaponRefPoints/Right")
+WeaponRefPointLeft = NodePath("WeaponRefPoints/Left")
+movement_speed = 50
+
+[node name="BodyCollisionShape" parent="." index="0"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_wgetr")
+
+[node name="WeaponRefPoints" type="Node2D" parent="." index="3"]
+
+[node name="Right" type="Node2D" parent="WeaponRefPoints" index="0"]
+
+[node name="Left" type="Node2D" parent="WeaponRefPoints" index="1"]

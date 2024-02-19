@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://dngfpjp7naisq"]
+
+[ext_resource type="PackedScene" uid="uid://cco617ejyaaci" path="res://Prefabs/Weapons/WeaponScene.tscn" id="1_rrsu1"]
+[ext_resource type="Texture2D" uid="uid://d24ct6bm7q7bh" path="res://Tilesets/dungeonSprites_ v1.5/weapons_.png" id="2_4iixs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t3wgx"]
+atlas = ExtResource("2_4iixs")
+region = Rect2(0, 24, 12, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rl7p1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t3wgx")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ofsx"]
+size = Vector2(5, 7)
+
+[node name="WoodAxe_0" instance=ExtResource("1_rrsu1")]
+sprite_frames = SubResource("SpriteFrames_rl7p1")
+animation = &"idle"
+menu_name = "Wood Axe"
+damage = 1
+
+[node name="WeaponCollisionShape" parent="WeaponCollisionArea" index="0"]
+position = Vector2(3.5, -5.5)
+shape = SubResource("RectangleShape2D_3ofsx")

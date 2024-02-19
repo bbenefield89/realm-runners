@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cco617ejyaaci"]
+
+[ext_resource type="Script" path="res://Scripts/Equipment/WeaponController.gd" id="1_s7i0v"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ic0gk"]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="WeaponSprite" type="AnimatedSprite2D" groups=["Weapon"]]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_ic0gk")
+script = ExtResource("1_s7i0v")
+
+[node name="WeaponCollisionArea" type="Area2D" parent="."]
+
+[node name="WeaponCollisionShape" type="CollisionShape2D" parent="WeaponCollisionArea"]
+
+[connection signal="body_entered" from="WeaponCollisionArea" to="." method="_on_weapon_collision_area_body_entered"]

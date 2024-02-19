@@ -1,11 +1,19 @@
-[gd_scene load_steps=42 format=3 uid="uid://b2cvs68g77i1q"]
+[gd_scene load_steps=37 format=3 uid="uid://b2cvs68g77i1q"]
 
 [ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="1_odw76"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="1_ylwus"]
-[ext_resource type="Texture2D" uid="uid://b7mrdfrx3ker0" path="res://Tilesets/camelot_ [version 1.0]/excalibur_.png" id="3_cc1ql"]
+[ext_resource type="Script" path="res://Scripts/StatsController.gd" id="3_fs8am"]
+[ext_resource type="PackedScene" uid="uid://cqu4hoxxhb0p0" path="res://Prefabs/Weapons/IronSword.tscn" id="4_bo2ia"]
 [ext_resource type="Script" path="res://Scripts/EnemyGoblinController.gd" id="4_ydcl6"]
 [ext_resource type="Texture2D" uid="uid://dxb7ljqvcv01y" path="res://Tilesets/dungeonSprites_ v1.5/goblin_.png" id="5_f1gj8"]
 [ext_resource type="Texture2D" uid="uid://d24ct6bm7q7bh" path="res://Tilesets/dungeonSprites_ v1.5/weapons_.png" id="6_7c1m0"]
+
+[sub_resource type="Resource" id="Resource_cs8at"]
+script = ExtResource("3_fs8am")
+health = {
+"curr": 10,
+"max": 10
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfb2n"]
 size = Vector2(10, 8)
@@ -79,86 +87,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_227p2"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ujbnn"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(0, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x54ol"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(32, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_em71n"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(64, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gbux2"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(96, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ssfii"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(0, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2j7hi"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(32, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d71tr"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(64, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y3lh3"]
-atlas = ExtResource("3_cc1ql")
-region = Rect2(96, 32, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_jq4pn"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_227p2")
-}],
-"loop": false,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ujbnn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x54ol")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_em71n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gbux2")
-}],
-"loop": false,
-"name": &"stab",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ssfii")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2j7hi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d71tr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y3lh3")
-}],
-"loop": false,
-"name": &"swing",
-"speed": 5.0
-}]
+[sub_resource type="Resource" id="Resource_4vlsy"]
+script = ExtResource("3_fs8am")
+health = {
+"curr": 0,
+"max": 0
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_35ywh"]
 size = Vector2(10, 7)
@@ -265,6 +199,21 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckuvq"]
+atlas = ExtResource("6_7c1m0")
+region = Rect2(12, 24, 12, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ny17g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ckuvq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_ij0qe"]
 radius = 82.0
 
@@ -274,10 +223,11 @@ radius = 82.0
 position = Vector2(101, 108)
 script = ExtResource("1_ylwus")
 PlayerSprite = NodePath("PlayerSprite")
-WeaponSprite = NodePath("WeaponSprite")
+WeaponSprite = NodePath("IronSword")
 WeaponCenterRef = NodePath("WeaponCenterRef")
 walk_speed = 200
 max_weap_dist_from_center_point = 20
+stats = SubResource("Resource_cs8at")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(0, 8)
@@ -288,16 +238,13 @@ texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_j3qvk")
 animation = &"idle"
 
-[node name="WeaponSprite" type="AnimatedSprite2D" parent="Player"]
-texture_filter = 1
-position = Vector2(10, 0)
-sprite_frames = SubResource("SpriteFrames_jq4pn")
-animation = &"idle"
+[node name="IronSword" parent="Player" instance=ExtResource("4_bo2ia")]
+position = Vector2(11, 0)
 
 [node name="WeaponCenterRef" type="Node2D" parent="Player"]
 position = Vector2(0, 5)
 
-[node name="Enemy_0" type="CharacterBody2D" parent="." node_paths=PackedStringArray("EnemySprite", "WeaponSprite", "RightWeaponSpriteRefPoint", "LeftWeaponSpriteRefPoint")]
+[node name="Enemy_0" type="CharacterBody2D" parent="." node_paths=PackedStringArray("EnemySprite", "WeaponSprite", "RightWeaponSpriteRefPoint", "LeftWeaponSpriteRefPoint") groups=["Enemy"]]
 position = Vector2(246, 110)
 script = ExtResource("4_ydcl6")
 EnemySprite = NodePath("EnemySprite")
@@ -308,6 +255,7 @@ movement_speed = 50
 swinging_attack_charging_up_speed = 2.0
 max_swinging_attack_charging_up_rotation = -0.7
 max_swinging_attack_release_rotation = 1.571
+stats = SubResource("Resource_4vlsy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy_0"]
 position = Vector2(0, 8.5)
@@ -318,12 +266,10 @@ texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_qpdwv")
 animation = &"idle"
 
-[node name="WeaponSprite" type="Sprite2D" parent="Enemy_0"]
+[node name="WeaponSprite" type="AnimatedSprite2D" parent="Enemy_0"]
 texture_filter = 1
 position = Vector2(8, 0)
-texture = ExtResource("6_7c1m0")
-region_enabled = true
-region_rect = Rect2(12, 24, 12, 24)
+sprite_frames = SubResource("SpriteFrames_ny17g")
 
 [node name="AggroRange" type="Area2D" parent="Enemy_0"]
 visible = false

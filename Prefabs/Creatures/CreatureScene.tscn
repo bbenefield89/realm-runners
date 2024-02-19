@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dn22tsjujcpod"]
+
+[ext_resource type="Script" path="res://Scripts/Equipment/EquipmentController.gd" id="1_hy7od"]
+[ext_resource type="Script" path="res://Scripts/Creatures/CreatureController.gd" id="1_vetry"]
+[ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="2_phirl"]
+
+[sub_resource type="Resource" id="Resource_1cdna"]
+script = ExtResource("2_phirl")
+max_health = 0
+curr_health = 0
+
+[node name="Creature" type="CharacterBody2D" node_paths=PackedStringArray("BodySprite", "Equipment")]
+script = ExtResource("1_vetry")
+BodySprite = NodePath("BodySprite")
+Equipment = NodePath("Equipment")
+stats = SubResource("Resource_1cdna")
+
+[node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
+
+[node name="BodySprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+
+[node name="Equipment" type="Node2D" parent="."]
+script = ExtResource("1_hy7od")

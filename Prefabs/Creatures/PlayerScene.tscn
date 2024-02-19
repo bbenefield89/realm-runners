@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=3 uid="uid://c7asklokn48k2"]
+
+[ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
+[ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
+[ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="2_evd7d"]
+[ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/IronSwordScene.tscn" id="4_rkwbu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0mff7"]
+size = Vector2(10, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fihi"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w55b2"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjlgb"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vfomq"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yygk5"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sudk"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1aedn"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhiwn"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(72, 48, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ayewj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fihi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w55b2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjlgb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vfomq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yygk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5sudk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1aedn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhiwn")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Player" node_paths=PackedStringArray("WeaponCenterRef") instance=ExtResource("1_v82vv")]
+script = ExtResource("2_5dl5e")
+WeaponCenterRef = NodePath("WeaponCenterRef")
+max_weap_dist_from_center_point = 20
+movement_speed = 100
+
+[node name="BodyCollisionShape" parent="." index="0"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_0mff7")
+
+[node name="BodySprite" parent="." index="1"]
+sprite_frames = SubResource("SpriteFrames_ayewj")
+animation = &"idle"
+
+[node name="Equipment" parent="." index="2" node_paths=PackedStringArray("Weapon")]
+Weapon = NodePath("IronSword")
+
+[node name="IronSword" parent="Equipment" index="0" instance=ExtResource("4_rkwbu")]
+position = Vector2(11, 0)
+
+[node name="WeaponCenterRef" type="Node2D" parent="." index="3"]
+position = Vector2(0, 5)
