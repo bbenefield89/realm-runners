@@ -5,6 +5,8 @@ class_name StatsResource
 @export var max_health: int
 @export var curr_health: int
 
+var owner: CreatureController
+
 
 signal creature_died()
 

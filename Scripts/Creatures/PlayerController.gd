@@ -25,6 +25,7 @@ var can_attack: bool = true
 
 
 func _ready():
+	super._ready()
 	transition_to_movement_state(MovementStates.IDLE)
 	transition_to_attacking_state(AttackingStates.IDLE)
 	connect_Equipment_signals()
@@ -136,7 +137,6 @@ func connect_Equipment_signals():
 
 
 func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
-	print("Damaging Enemy: ", Enemy.name)
 	Enemy.stats.apply_damage(Equipment.Weapon.damage)
 
 
