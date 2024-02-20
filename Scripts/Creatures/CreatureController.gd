@@ -18,6 +18,7 @@ var curr_life_state: LifeStates
 
 
 func _ready():
+	stats = stats.duplicate()
 	transition_to_life_state(LifeStates.ALIVE)
 	connect_signals()
 

@@ -9,10 +9,4 @@
 position = Vector2(186, 114)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(103, 92)
-
-[node name="Goblin_1" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(274, 83)
-
-[node name="Goblin_2" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(192, 200)
+position = Vector2(282, 115)

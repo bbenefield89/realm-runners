@@ -14,3 +14,26 @@ func apply_damage(damage: int):
 	
 	if curr_health <= 0:
 		creature_died.emit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

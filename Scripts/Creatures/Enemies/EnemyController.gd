@@ -8,21 +8,49 @@ enum MovementStates {
 	CHASING,
 }
 
+enum AttackStates {
+	IDLE,
+	SWINGING,
+}
+
+enum SwingingAttackStates {
+	IDLE,
+	CHARGING_UP,
+	RELEASE,
+	RESET,
+}
+
 
 @export var WeaponRefPointRight: Node2D
 @export var WeaponRefPointLeft: Node2D
 
+@export var swinging_attack_charging_up_speed: float
+@export var max_swinging_attack_charging_up_rotation: float
+
+@export var swinging_attack_release_speed: float
+@export var max_swinging_attack_release_rotation: float
+
 var Player: PlayerController
 var curr_movement_state: MovementStates
+var curr_attack_state: AttackStates
+var curr_swinging_attack_state: SwingingAttackStates
+var weapon_rotation_direction := 1 
 
 
 func _ready():
 	super._ready()
 	curr_movement_state = MovementStates.IDLE
+	curr_attack_state = AttackStates.IDLE
+
+
+#func _input(_event: InputEvent) -> void:
+	#if Input.is_action_just_pressed(Constants.inputActions.attack_primary):
+		#curr_attack_state = AttackStates.SWINGING
+		#curr_swinging_attack_state = SwingingAttackStates.CHARGING_UP
 
 
 func _physics_process(_delta: float) -> void:
-	if curr_life_state == LifeStates.DEAD:
+	if curr_life_state != LifeStates.ALIVE or curr_attack_state != AttackStates.IDLE:
 		return
 	
 	match curr_movement_state:
@@ -36,6 +64,15 @@ func _physics_process(_delta: float) -> void:
 			handle_chasing_movement_state()
 	
 	move_and_slide()
+
+
+func _process(delta: float) -> void:
+	match curr_attack_state:
+		AttackStates.IDLE:
+			pass
+		
+		AttackStates.SWINGING:
+			handle_swinging_attack_state(delta)
 
 
 func handle_idle_movement_state():
@@ -65,19 +102,84 @@ func flip_sprites_horizontally(should_flip_h: bool):
 		WeaponRefPointRight.position)
 
 
+func handle_swinging_attack_state(delta: float):
+	match curr_swinging_attack_state:
+		SwingingAttackStates.IDLE:
+			handle_idle_swinging_attack_state()
+		
+		SwingingAttackStates.CHARGING_UP:
+			handle_charging_up_swinging_attack_state(delta)
+		
+		SwingingAttackStates.RELEASE:
+			handle_release_swinging_attack_state(delta)
+		
+		SwingingAttackStates.RESET:
+			handle_reset_swinging_attack_state(delta)
+
+
+func handle_idle_swinging_attack_state():
+	Equipment.Weapon.rotation = 0
+
+
+func handle_charging_up_swinging_attack_state(delta: float):
+	var rotation_direction := 1 if BodySprite.flip_h else -1
+	Equipment.Weapon.rotation += rotation_direction * swinging_attack_charging_up_speed * delta
+	
+	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
+	if (BodySprite.flip_h and
+		approximate_weapon_sprite_rotation >= abs(max_swinging_attack_charging_up_rotation)):
+			curr_swinging_attack_state = SwingingAttackStates.RELEASE
+	
+	elif (not BodySprite.flip_h and
+		approximate_weapon_sprite_rotation <= max_swinging_attack_charging_up_rotation):
+			curr_swinging_attack_state = SwingingAttackStates.RELEASE
+
+
+func handle_release_swinging_attack_state(delta: float):
+	var rotation_direction := -1 if BodySprite.flip_h else 1
+	Equipment.Weapon.rotation += rotation_direction * swinging_attack_release_speed * delta
+	
+	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation + 0.10
+	if (BodySprite.flip_h and
+		approximate_weapon_sprite_rotation <= max_swinging_attack_release_rotation * -1):
+			curr_swinging_attack_state = SwingingAttackStates.RESET
+	
+	if (not BodySprite.flip_h and
+		approximate_weapon_sprite_rotation >= max_swinging_attack_release_rotation):
+			curr_swinging_attack_state = SwingingAttackStates.RESET
+
+
+func handle_reset_swinging_attack_state(delta: float):
+	Equipment.Weapon.rotation = max(
+		Equipment.Weapon.rotation - 10 * delta,
+		0.0)
+	
+	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
+	if approximate_weapon_sprite_rotation <= 0.0:
+		curr_swinging_attack_state = SwingingAttackStates.IDLE
+
+
 func _on_AggroArea_body_entered(body: Node2D) -> void:
-	if check_if_is_player(body):
+	if body is PlayerController:
 		Player = body
 		curr_movement_state = MovementStates.CHASING
 
 
 func _on_AggroArea_body_exited(body: Node2D) -> void:
-	if check_if_is_player(body):
+	if body is PlayerController:
 		curr_movement_state = MovementStates.IDLE
 
 
-func check_if_is_player(body: Node2D) -> bool:
-	return true if (body.name as String).to_lower() == "player" else false
+func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
+	if body is PlayerController:
+		curr_attack_state = AttackStates.SWINGING
+		curr_swinging_attack_state = SwingingAttackStates.CHARGING_UP
+
+
+func _on_MeleeAttackArea_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
 
 
 

@@ -136,6 +136,7 @@ func connect_Equipment_signals():
 
 
 func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
+	print("Damaging Enemy: ", Enemy.name)
 	Enemy.stats.apply_damage(Equipment.Weapon.damage)
 
 
