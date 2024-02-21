@@ -10,15 +10,15 @@ enum MovementStates {
 
 enum AttackStates {
 	IDLE,
-	SWINGING,
+	ATTACKING,
 }
 
-enum SwingingAttackStates {
-	IDLE,
-	CHARGING_UP,
-	RELEASE,
-	RESET,
-}
+#enum SwingingAttackStates {
+	#IDLE,
+	#CHARGING_UP,
+	#RELEASE,
+	#RESET,
+#}
 
 
 @export var WeaponRefPointRight: Node2D
@@ -33,8 +33,9 @@ enum SwingingAttackStates {
 var Player: PlayerController
 var curr_movement_state: MovementStates
 var curr_attack_state: AttackStates
-var curr_swinging_attack_state: SwingingAttackStates
+#var curr_swinging_attack_state: SwingingAttackStates
 var can_hit_player := false
+var can_attack := true
 
 
 func _ready():
@@ -44,7 +45,7 @@ func _ready():
 
 
 func _physics_process(_delta: float) -> void:
-	if curr_life_state != LifeStates.ALIVE or curr_attack_state != AttackStates.IDLE:
+	if curr_life_state != LifeStates.ALIVE:
 		return
 	
 	match curr_movement_state:
@@ -56,17 +57,25 @@ func _physics_process(_delta: float) -> void:
 			
 		MovementStates.CHASING:
 			handle_chasing_movement_state()
-	
+		
 	move_and_slide()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	match curr_attack_state:
 		AttackStates.IDLE:
 			pass
 		
-		AttackStates.SWINGING:
-			handle_swinging_attack_state(delta)
+		AttackStates.ATTACKING:
+			handle_attacking_attack_state()
+
+
+func connect_signals():
+	connect_Weapon_signals()
+
+
+func connect_Weapon_signals():
+	Equipment.Weapon.release_animation_finished.connect(_on_Weapon_release_animation_finished)
 
 
 func handle_idle_movement_state():
@@ -75,15 +84,10 @@ func handle_idle_movement_state():
 
 
 func handle_chasing_movement_state():
-	var dist_from_player := (position - Player.position).length()
 	var dir_to_player := (Player.position - position).normalized()
-	
-	if dist_from_player > 20:
-		velocity = dir_to_player * movement_speed
-	else:
-		curr_movement_state = MovementStates.IDLE
-	
 	var should_flip_h := true if dir_to_player.x < 0 else false
+	
+	velocity = dir_to_player * movement_speed
 	flip_sprites_horizontally(should_flip_h)
 	BodySprite.play("run")
 
@@ -96,101 +100,75 @@ func flip_sprites_horizontally(should_flip_h: bool):
 		WeaponRefPointRight.position)
 
 
-func handle_swinging_attack_state(delta: float):
-	match curr_swinging_attack_state:
-		SwingingAttackStates.IDLE:
-			handle_idle_swinging_attack_state()
-		
-		SwingingAttackStates.CHARGING_UP:
-			handle_charging_up_swinging_attack_state(delta)
-		
-		SwingingAttackStates.RELEASE:
-			handle_release_swinging_attack_state(delta)
-		
-		SwingingAttackStates.RESET:
-			handle_reset_swinging_attack_state(delta)
+func handle_idle_attack_state():
+	can_attack = true
 
 
-func handle_idle_swinging_attack_state():
-	Equipment.Weapon.rotation = 0
-
-
+func handle_attacking_attack_state():
+	if can_attack:
+		can_attack = false
+		Equipment.Weapon.curr_attack_state = WeaponController.AttackStates.CHARGE_UP
+	
+	#match curr_swinging_attack_state:
+		#SwingingAttackStates.IDLE:
+			#handle_idle_swinging_attack_state()
+		#
+		#SwingingAttackStates.CHARGING_UP:
+			#handle_charging_up_swinging_attack_state(delta)
+		#
+		#SwingingAttackStates.RELEASE:
+			#handle_release_swinging_attack_state(delta)
+		#
+		#SwingingAttackStates.RESET:
+			#handle_reset_swinging_attack_state(delta)
+#
+#
+#func handle_idle_swinging_attack_state():
+	#Equipment.Weapon.rotation = 0
+#
+#
 #func handle_charging_up_swinging_attack_state(delta: float):
 	#var rotation_direction := 1 if BodySprite.flip_h else -1
 	#Equipment.Weapon.rotation += rotation_direction * swinging_attack_charging_up_speed * delta
 	#
+	#var has_reached_desired_rotation := false
 	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
-	#if (BodySprite.flip_h and
-		#approximate_weapon_sprite_rotation >= abs(max_swinging_attack_charging_up_rotation)):
-			#curr_swinging_attack_state = SwingingAttackStates.RELEASE
+	#if BodySprite.flip_h:
+		#has_reached_desired_rotation = approximate_weapon_sprite_rotation >= abs(max_swinging_attack_charging_up_rotation)
+	#else:
+		#has_reached_desired_rotation = approximate_weapon_sprite_rotation <= max_swinging_attack_charging_up_rotation
 	#
-	#elif (not BodySprite.flip_h and
-		#approximate_weapon_sprite_rotation <= max_swinging_attack_charging_up_rotation):
-			#curr_swinging_attack_state = SwingingAttackStates.RELEASE
+	#if has_reached_desired_rotation:
+		#curr_swinging_attack_state = SwingingAttackStates.RELEASE
 #
 #
 #func handle_release_swinging_attack_state(delta: float):
 	#var rotation_direction := -1 if BodySprite.flip_h else 1
 	#Equipment.Weapon.rotation += rotation_direction * swinging_attack_release_speed * delta
 	#
+	#var has_reached_desired_rotation := false
 	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation + 0.10
-	#if (BodySprite.flip_h and
-		#approximate_weapon_sprite_rotation <= max_swinging_attack_release_rotation * -1):
-			#curr_swinging_attack_state = SwingingAttackStates.RESET
-			#
-			#if can_hit_player:
-				#Player.stats.apply_damage(Equipment.Weapon.damage)
+	#if BodySprite.flip_h:
+		#has_reached_desired_rotation = approximate_weapon_sprite_rotation <= max_swinging_attack_release_rotation * -1
+	#else:
+		#has_reached_desired_rotation = approximate_weapon_sprite_rotation >= max_swinging_attack_release_rotation
 	#
-	#elif (not BodySprite.flip_h and
-		#approximate_weapon_sprite_rotation >= max_swinging_attack_release_rotation):
-			#curr_swinging_attack_state = SwingingAttackStates.RESET
-			#
-			#if can_hit_player:
-				#Player.stats.apply_damage(Equipment.Weapon.damage)
-
-
-func handle_charging_up_swinging_attack_state(delta: float):
-	var rotation_direction := 1 if BodySprite.flip_h else -1
-	Equipment.Weapon.rotation += rotation_direction * swinging_attack_charging_up_speed * delta
-	
-	var is_desired_rotation_reached := false
-	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
-	if BodySprite.flip_h:
-		is_desired_rotation_reached = approximate_weapon_sprite_rotation >= abs(max_swinging_attack_charging_up_rotation)
-	else:
-		is_desired_rotation_reached = approximate_weapon_sprite_rotation <= max_swinging_attack_charging_up_rotation
-	
-	if is_desired_rotation_reached:
-		curr_swinging_attack_state = SwingingAttackStates.RELEASE
-
-
-func handle_release_swinging_attack_state(delta: float):
-	var rotation_direction := -1 if BodySprite.flip_h else 1
-	Equipment.Weapon.rotation += rotation_direction * swinging_attack_release_speed * delta
-	
-	var is_desired_rotation_reached := false
-	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation + 0.10
-	if BodySprite.flip_h:
-		is_desired_rotation_reached = approximate_weapon_sprite_rotation <= max_swinging_attack_release_rotation * -1
-	else:
-		is_desired_rotation_reached = approximate_weapon_sprite_rotation >= max_swinging_attack_release_rotation
-	
-	if is_desired_rotation_reached:
-		curr_swinging_attack_state = SwingingAttackStates.RESET
-		
-		if can_hit_player:
-			print("Applying damage to: ", Player.name)
-			Player.stats.apply_damage(Equipment.Weapon.damage)
-
-
-func handle_reset_swinging_attack_state(delta: float):
-	Equipment.Weapon.rotation = max(
-		Equipment.Weapon.rotation - 10 * delta,
-		0.0)
-	
-	var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
-	if approximate_weapon_sprite_rotation <= 0.0:
-		curr_swinging_attack_state = SwingingAttackStates.IDLE
+	#if has_reached_desired_rotation:
+		#curr_swinging_attack_state = SwingingAttackStates.RESET
+		#
+		#if can_hit_player:
+			#print("Applying damage to: ", Player.name)
+			#Player.stats.apply_damage(Equipment.Weapon.damage)
+#
+#
+#func handle_reset_swinging_attack_state(delta: float):
+	#Equipment.Weapon.rotation = max(
+		#Equipment.Weapon.rotation - 10 * delta,
+		#0.0)
+	#
+	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
+	#if approximate_weapon_sprite_rotation <= 0.0:
+		#curr_swinging_attack_state = SwingingAttackStates.IDLE
 
 
 func _on_AggroArea_body_entered(body: Node2D) -> void:
@@ -206,14 +184,20 @@ func _on_AggroArea_body_exited(body: Node2D) -> void:
 
 func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
-		curr_attack_state = AttackStates.SWINGING
-		curr_swinging_attack_state = SwingingAttackStates.CHARGING_UP
 		can_hit_player = true
+		curr_movement_state = MovementStates.IDLE
+		curr_attack_state = AttackStates.ATTACKING
+		BodySprite.play("idle")
 
 
 func _on_MeleeAttackArea_body_exited(body: Node2D) -> void:
 	if body is PlayerController:
 		can_hit_player = false
+
+
+func _on_Weapon_release_animation_finished(damage: int):
+	if can_hit_player:
+		Player.stats.apply_damage(damage)
 
 
 

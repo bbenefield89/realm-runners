@@ -10,7 +10,7 @@ size = Vector2(10, 8)
 radius = 73.0069
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gq0en"]
-radius = 19.0
+radius = 61.0082
 
 [node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
 script = ExtResource("2_xhvld")
@@ -20,7 +20,6 @@ swinging_attack_charging_up_speed = 0.0
 max_swinging_attack_charging_up_rotation = 0.0
 swinging_attack_release_speed = 0.0
 max_swinging_attack_release_rotation = 0.0
-movement_speed = 50
 
 [node name="BodyCollisionShape" parent="." index="0"]
 position = Vector2(0, 8)

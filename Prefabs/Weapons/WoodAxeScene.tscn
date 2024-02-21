@@ -26,6 +26,10 @@ sprite_frames = SubResource("SpriteFrames_rl7p1")
 animation = &"idle"
 menu_name = "Wood Axe"
 damage = 1
+charge_up_speed = 2.0
+max_charge_up_rotation = -0.785
+release_speed = 10.0
+max_release_rotation = 1.571
 
 [node name="WeaponCollisionShape" parent="WeaponCollisionArea" index="0"]
 position = Vector2(3.5, -5.5)

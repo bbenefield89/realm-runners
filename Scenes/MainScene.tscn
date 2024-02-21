@@ -6,7 +6,8 @@
 [node name="MainScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_mop1v")]
-position = Vector2(186, 114)
+position = Vector2(253, 132)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(282, 115)
+position = Vector2(165, 131)
+movement_speed = 10
