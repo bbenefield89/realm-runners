@@ -17,6 +17,7 @@ enum AttackStates {
 @export var max_charge_up_rotation: float
 @export var release_speed: float
 @export var max_release_rotation: float
+@export var reset_attack_speed: float
 
 var curr_attack_state: AttackStates
 
@@ -51,10 +52,11 @@ func handle_idle_attack_state():
 
 func handle_charge_up_attack_state(delta: float):
 	var rotation_direction := 1 if flip_h else -1
-	rotation += rotation_direction * charge_up_speed * delta
+	rotate(rotation_direction * charge_up_speed * delta)
 	
 	var has_reached_desired_rotation := false
 	var approximate_weapon_sprite_rotation := rotation - 0.10
+	
 	if flip_h:
 		has_reached_desired_rotation = approximate_weapon_sprite_rotation >= abs(max_charge_up_rotation)
 	else:
@@ -66,7 +68,7 @@ func handle_charge_up_attack_state(delta: float):
 
 func handle_release_attack_state(delta: float):
 	var rotation_direction := -1 if flip_h else 1
-	rotation += rotation_direction * release_speed * delta
+	rotate(rotation_direction * release_speed * delta)
 	
 	var has_reached_desired_rotation := false
 	var approximate_weapon_sprite_rotation := rotation + 0.10
@@ -81,10 +83,14 @@ func handle_release_attack_state(delta: float):
 
 
 func handle_reset_attack_state(delta: float):
-	rotation += 10 * delta
+	var rotation_direction := 1 if flip_h else -1
+	rotate(rotation_direction * reset_attack_speed * delta)
 	
 	var approximate_weapon_sprite_rotation := rotation - 0.10
-	if approximate_weapon_sprite_rotation <= 0.0:
+	var has_reached_desired_rotation = (-0.1 <= approximate_weapon_sprite_rotation and
+		approximate_weapon_sprite_rotation <= 0.1)
+	
+	if has_reached_desired_rotation:
 		curr_attack_state = AttackStates.IDLE
 
 

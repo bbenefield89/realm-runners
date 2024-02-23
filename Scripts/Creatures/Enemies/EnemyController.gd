@@ -108,67 +108,6 @@ func handle_attacking_attack_state():
 	if can_attack:
 		can_attack = false
 		Equipment.Weapon.curr_attack_state = WeaponController.AttackStates.CHARGE_UP
-	
-	#match curr_swinging_attack_state:
-		#SwingingAttackStates.IDLE:
-			#handle_idle_swinging_attack_state()
-		#
-		#SwingingAttackStates.CHARGING_UP:
-			#handle_charging_up_swinging_attack_state(delta)
-		#
-		#SwingingAttackStates.RELEASE:
-			#handle_release_swinging_attack_state(delta)
-		#
-		#SwingingAttackStates.RESET:
-			#handle_reset_swinging_attack_state(delta)
-#
-#
-#func handle_idle_swinging_attack_state():
-	#Equipment.Weapon.rotation = 0
-#
-#
-#func handle_charging_up_swinging_attack_state(delta: float):
-	#var rotation_direction := 1 if BodySprite.flip_h else -1
-	#Equipment.Weapon.rotation += rotation_direction * swinging_attack_charging_up_speed * delta
-	#
-	#var has_reached_desired_rotation := false
-	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
-	#if BodySprite.flip_h:
-		#has_reached_desired_rotation = approximate_weapon_sprite_rotation >= abs(max_swinging_attack_charging_up_rotation)
-	#else:
-		#has_reached_desired_rotation = approximate_weapon_sprite_rotation <= max_swinging_attack_charging_up_rotation
-	#
-	#if has_reached_desired_rotation:
-		#curr_swinging_attack_state = SwingingAttackStates.RELEASE
-#
-#
-#func handle_release_swinging_attack_state(delta: float):
-	#var rotation_direction := -1 if BodySprite.flip_h else 1
-	#Equipment.Weapon.rotation += rotation_direction * swinging_attack_release_speed * delta
-	#
-	#var has_reached_desired_rotation := false
-	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation + 0.10
-	#if BodySprite.flip_h:
-		#has_reached_desired_rotation = approximate_weapon_sprite_rotation <= max_swinging_attack_release_rotation * -1
-	#else:
-		#has_reached_desired_rotation = approximate_weapon_sprite_rotation >= max_swinging_attack_release_rotation
-	#
-	#if has_reached_desired_rotation:
-		#curr_swinging_attack_state = SwingingAttackStates.RESET
-		#
-		#if can_hit_player:
-			#print("Applying damage to: ", Player.name)
-			#Player.stats.apply_damage(Equipment.Weapon.damage)
-#
-#
-#func handle_reset_swinging_attack_state(delta: float):
-	#Equipment.Weapon.rotation = max(
-		#Equipment.Weapon.rotation - 10 * delta,
-		#0.0)
-	#
-	#var approximate_weapon_sprite_rotation := Equipment.Weapon.rotation - 0.10
-	#if approximate_weapon_sprite_rotation <= 0.0:
-		#curr_swinging_attack_state = SwingingAttackStates.IDLE
 
 
 func _on_AggroArea_body_entered(body: Node2D) -> void:
