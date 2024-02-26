@@ -17,8 +17,7 @@ enum AttackStates {
 @export var WeaponRefPointRight: Node2D
 @export var WeaponRefPointLeft: Node2D
 @export var MeleeAttackArea: Area2D
-
-@export var attack_speed_interval: float
+@export var MeleeAttackTimer: Timer
 
 #region Unused Weapon Vars
 @export_group("Not used atm")
@@ -117,18 +116,21 @@ func _on_AggroArea_body_exited(body: Node2D) -> void:
 
 func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
-		is_colliding_with_player = true
-		
-		while is_colliding_with_player:
-			curr_movement_state = MovementStates.IDLE
-			Player.stats.apply_damage(Equipment.Weapon.damage)
-			await get_tree().create_timer(attack_speed_interval).timeout
+		Player.take_damage(Equipment.Weapon.damage)
+		MeleeAttackTimer.start()
 
 
 func _on_melee_attack_area_body_exited(body: Node2D) -> void:
 	if body is PlayerController:
-		is_colliding_with_player = false
+		MeleeAttackTimer.stop()
 		curr_movement_state = MovementStates.CHASING
+
+
+func _on_melee_attack_timer_timeout() -> void:
+	Player.take_damage(Equipment.Weapon.damage)
+
+
+
 
 
 

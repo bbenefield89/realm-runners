@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c7asklokn48k2"]
+[gd_scene load_steps=21 format=3 uid="uid://c7asklokn48k2"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
@@ -9,10 +9,26 @@
 [sub_resource type="Resource" id="Resource_b272u"]
 script = ExtResource("3_61y5n")
 max_health = 10
-curr_health = 10
+curr_health = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0mff7"]
 size = Vector2(10, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l60xi"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(0, 120, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ma4xw"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(24, 120, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vium"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(48, 120, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhair"]
+atlas = ExtResource("2_evd7d")
+region = Rect2(72, 120, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1fihi"]
 atlas = ExtResource("2_evd7d")
@@ -50,6 +66,23 @@ region = Rect2(72, 48, 24, 24)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_l60xi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ma4xw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5vium")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hhair")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_1fihi")
 }, {
 "duration": 1.0,
@@ -83,10 +116,13 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" node_paths=PackedStringArray("WeaponCenterRef") instance=ExtResource("1_v82vv")]
+[node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer") instance=ExtResource("1_v82vv")]
 script = ExtResource("2_5dl5e")
 WeaponCenterRef = NodePath("WeaponCenterRef")
+DamageFlashTimer = NodePath("Timers/DamageFlashTimer")
+DamageTimeoutTimer = NodePath("Timers/DamageTimeoutTimer")
 max_weap_dist_from_center_point = 15
+max_damage_flash_time = 0.0
 stats = SubResource("Resource_b272u")
 movement_speed = 100
 
@@ -96,7 +132,7 @@ shape = SubResource("RectangleShape2D_0mff7")
 
 [node name="BodySprite" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_ayewj")
-animation = &"idle"
+animation = &"death"
 
 [node name="Equipment" parent="." index="2" node_paths=PackedStringArray("Weapon")]
 Weapon = NodePath("IronSword")
@@ -107,3 +143,14 @@ is_players_weapon = true
 
 [node name="WeaponCenterRef" type="Node2D" parent="." index="3"]
 position = Vector2(0, 5)
+
+[node name="Timers" type="Node" parent="." index="4"]
+
+[node name="DamageFlashTimer" type="Timer" parent="Timers" index="0"]
+wait_time = 0.2
+
+[node name="DamageTimeoutTimer" type="Timer" parent="Timers" index="1"]
+one_shot = true
+
+[connection signal="timeout" from="Timers/DamageFlashTimer" to="." method="_on_damage_colors_timer_timeout"]
+[connection signal="timeout" from="Timers/DamageTimeoutTimer" to="." method="_on_damage_timeout_timeout"]

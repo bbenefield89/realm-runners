@@ -53,6 +53,9 @@ func _on_creature_died():
 	transition_to_life_state(LifeStates.DEAD)
 
 
+func take_damage(_damage: int):
+	assert(false, "Must implement take_damage func")
+
 
 
 
