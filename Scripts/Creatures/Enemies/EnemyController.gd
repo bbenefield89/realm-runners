@@ -13,29 +13,25 @@ enum AttackStates {
 	ATTACKING,
 }
 
-#enum SwingingAttackStates {
-	#IDLE,
-	#CHARGING_UP,
-	#RELEASE,
-	#RESET,
-#}
-
 
 @export var WeaponRefPointRight: Node2D
 @export var WeaponRefPointLeft: Node2D
+@export var MeleeAttackArea: Area2D
 
+@export var attack_speed_interval: float
+
+@export_group("Not used atm")
 @export var swinging_attack_charging_up_speed: float
 @export var max_swinging_attack_charging_up_rotation: float
-
 @export var swinging_attack_release_speed: float
 @export var max_swinging_attack_release_rotation: float
 
 var Player: PlayerController
 var curr_movement_state: MovementStates
 var curr_attack_state: AttackStates
-#var curr_swinging_attack_state: SwingingAttackStates
 var can_hit_player := false
 var can_attack := true
+var is_colliding_with_player := false
 
 
 func _ready():
@@ -48,17 +44,7 @@ func _physics_process(_delta: float) -> void:
 	if curr_life_state != LifeStates.ALIVE:
 		return
 	
-	match curr_movement_state:
-		MovementStates.IDLE:
-			handle_idle_movement_state()
-		
-		MovementStates.WALKING:
-			pass
-			
-		MovementStates.CHASING:
-			handle_chasing_movement_state()
-		
-	move_and_slide()
+	handle_movement()
 
 
 func _process(_delta: float) -> void:
@@ -70,12 +56,18 @@ func _process(_delta: float) -> void:
 			handle_attacking_attack_state()
 
 
-func connect_signals():
-	connect_Weapon_signals()
-
-
-func connect_Weapon_signals():
-	Equipment.Weapon.release_animation_finished.connect(_on_Weapon_release_animation_finished)
+func handle_movement():
+	match curr_movement_state:
+		MovementStates.IDLE:
+			handle_idle_movement_state()
+		
+		MovementStates.WALKING:
+			pass
+			
+		MovementStates.CHASING:
+			handle_chasing_movement_state()
+		
+	move_and_slide()
 
 
 func handle_idle_movement_state():
@@ -123,20 +115,23 @@ func _on_AggroArea_body_exited(body: Node2D) -> void:
 
 func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
-		can_hit_player = true
-		curr_movement_state = MovementStates.IDLE
-		curr_attack_state = AttackStates.ATTACKING
-		BodySprite.play("idle")
+		is_colliding_with_player = true
+		
+		while is_colliding_with_player:
+			curr_movement_state = MovementStates.IDLE
+			Player.stats.apply_damage(Equipment.Weapon.damage)
+			await get_tree().create_timer(attack_speed_interval).timeout
 
 
-func _on_MeleeAttackArea_body_exited(body: Node2D) -> void:
+func _on_melee_attack_area_body_exited(body: Node2D) -> void:
 	if body is PlayerController:
-		can_hit_player = false
+		is_colliding_with_player = false
 
 
-func _on_Weapon_release_animation_finished(damage: int):
-	if can_hit_player:
-		Player.stats.apply_damage(damage)
+
+
+
+
 
 
 

@@ -20,7 +20,8 @@ enum AttackingStates {
 
 var curr_movement_state: MovementStates
 var curr_attacking_state: AttackingStates
-var can_attack: bool = true
+var can_attack := true
+var can_take_damage := true
 
 
 func _ready():
