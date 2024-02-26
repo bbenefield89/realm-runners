@@ -12,7 +12,6 @@ signal creature_died()
 
 
 func apply_damage(damage: int):
-	print("%s has taken %d damage" % [owner.name, damage])
 	curr_health -= damage
 	
 	if curr_health <= 0:

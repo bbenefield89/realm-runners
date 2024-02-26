@@ -5,6 +5,7 @@ class_name PlayerController
 enum MovementStates {
 	IDLE,
 	MOVING,
+	DAMAGED,
 }
 
 enum AttackingStates {
@@ -15,13 +16,17 @@ enum AttackingStates {
 
 
 @export var WeaponCenterRef: Node2D
+@export var DamageFlashTimer: Timer
+@export var DamageTimeoutTimer: Timer
 
 @export var max_weap_dist_from_center_point: int
+@export var max_damage_flash_time: float
 
 var curr_movement_state: MovementStates
 var curr_attacking_state: AttackingStates
 var can_attack := true
 var can_take_damage := true
+var total_time_damage_flashing := 0.0
 
 
 func _ready():
@@ -42,13 +47,17 @@ func _input(_event: InputEvent):
 
 
 func handle_movement():
-	var input := Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
-	velocity = input * movement_speed
-	
-	if velocity != Vector2.ZERO:
-		transition_to_movement_state(MovementStates.MOVING)
-	else:
-		transition_to_movement_state(MovementStates.IDLE)
+	if not curr_life_state == LifeStates.DEAD:
+		var input := Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
+		velocity = input * movement_speed
+		
+		if not curr_movement_state == MovementStates.DAMAGED:
+			if velocity != Vector2.ZERO:
+				transition_to_movement_state(MovementStates.MOVING)
+			else:
+				transition_to_movement_state(MovementStates.IDLE)
+		
+		move_and_slide()
 
 
 func handle_WeaponSprite_movement():
@@ -74,6 +83,9 @@ func transition_to_movement_state(new_state: MovementStates):
 		
 		MovementStates.MOVING:
 			handle_moving_state()
+		
+		MovementStates.DAMAGED:
+			handle_damaged_state()
 
 
 func handle_idle_state():
@@ -82,7 +94,10 @@ func handle_idle_state():
 
 func handle_moving_state():
 	BodySprite.play("walk")
-	move_and_slide()
+
+
+func handle_damaged_state():
+	BodySprite.play("taking_damage")
 
 
 func handle_attack_input():
@@ -132,12 +147,42 @@ func exit_attacking_state():
 	transition_to_attacking_state(AttackingStates.IDLE)
 
 
+func handle_dead_life_state():
+	await super.handle_dead_life_state()
+	get_tree().change_scene_to_file("res://Scenes/GameOverScene.tscn")
+
+
+func take_damage(damage: int):
+	if can_take_damage:
+		can_take_damage = false
+		BodySprite.modulate = Color.RED
+		stats.apply_damage(damage)
+		DamageFlashTimer.start()
+		DamageTimeoutTimer.start()
+
+
+func _on_damage_colors_timer_timeout() -> void:
+	BodySprite.modulate = Color.RED if BodySprite.modulate == Color.WHITE else Color.WHITE
+
+
+func _on_damage_timeout_timeout() -> void:
+	can_take_damage = true
+	BodySprite.modulate = Color.WHITE
+	DamageFlashTimer.stop()
+
+
 func connect_Equipment_signals():
 	Equipment.Weapon.weapon_hit_enemy.connect(_on_IronSword_weapon_hit_enemy)
 
 
 func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
 	Enemy.stats.apply_damage(Equipment.Weapon.damage)
+
+
+
+
+
+
 
 
 

@@ -9,4 +9,22 @@
 position = Vector2(253, 132)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(169, 134)
+position = Vector2(413, 86)
+
+[node name="Goblin_1" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(41, 18)
+
+[node name="Goblin_2" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(41, 48)
+
+[node name="Goblin_3" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(31, 89)
+
+[node name="Goblin_4" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(27, 115)
+
+[node name="Goblin_5" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(18, 64)
+
+[node name="Goblin_6" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(61, 60)
