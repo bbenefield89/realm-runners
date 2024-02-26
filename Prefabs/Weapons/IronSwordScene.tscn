@@ -85,7 +85,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7v1do"]
-size = Vector2(6, 12)
+size = Vector2(6, 20)
 
 [node name="IronSword_0" instance=ExtResource("1_12qwv")]
 sprite_frames = SubResource("SpriteFrames_8vrcs")
@@ -94,5 +94,4 @@ menu_name = "Iron Sword"
 damage = 5
 
 [node name="WeaponCollisionShape" parent="WeaponCollisionArea" index="0"]
-position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_7v1do")

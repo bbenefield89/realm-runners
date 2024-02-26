@@ -20,11 +20,13 @@ enum AttackStates {
 
 @export var attack_speed_interval: float
 
+#region Unused Weapon Vars
 @export_group("Not used atm")
 @export var swinging_attack_charging_up_speed: float
 @export var max_swinging_attack_charging_up_rotation: float
 @export var swinging_attack_release_speed: float
 @export var max_swinging_attack_release_rotation: float
+#endregion
 
 var Player: PlayerController
 var curr_movement_state: MovementStates
