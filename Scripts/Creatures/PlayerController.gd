@@ -47,16 +47,17 @@ func _input(_event: InputEvent):
 
 
 func handle_movement():
-	var input := Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
-	velocity = input * movement_speed
-	
-	if not curr_movement_state == MovementStates.DAMAGED:
-		if velocity != Vector2.ZERO:
-			transition_to_movement_state(MovementStates.MOVING)
-		else:
-			transition_to_movement_state(MovementStates.IDLE)
-	
-	move_and_slide()
+	if not curr_life_state == LifeStates.DEAD:
+		var input := Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
+		velocity = input * movement_speed
+		
+		if not curr_movement_state == MovementStates.DAMAGED:
+			if velocity != Vector2.ZERO:
+				transition_to_movement_state(MovementStates.MOVING)
+			else:
+				transition_to_movement_state(MovementStates.IDLE)
+		
+		move_and_slide()
 
 
 func handle_WeaponSprite_movement():
@@ -146,12 +147,16 @@ func exit_attacking_state():
 	transition_to_attacking_state(AttackingStates.IDLE)
 
 
+func handle_dead_life_state():
+	await super.handle_dead_life_state()
+	get_tree().change_scene_to_file("res://Scenes/GameOverScene.tscn")
+
 
 func take_damage(damage: int):
 	if can_take_damage:
 		can_take_damage = false
-		stats.apply_damage(damage)
 		BodySprite.modulate = Color.RED
+		stats.apply_damage(damage)
 		DamageFlashTimer.start()
 		DamageTimeoutTimer.start()
 

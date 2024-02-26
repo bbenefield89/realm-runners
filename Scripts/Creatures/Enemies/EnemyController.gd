@@ -103,6 +103,11 @@ func handle_attacking_attack_state():
 		Equipment.Weapon.curr_attack_state = WeaponController.AttackStates.CHARGE_UP
 
 
+func handle_dead_life_state():
+	await super.handle_dead_life_state()
+	queue_free()
+
+
 func _on_AggroArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
 		Player = body

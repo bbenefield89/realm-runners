@@ -38,7 +38,6 @@ func transition_to_life_state(new_state: LifeStates):
 func handle_dead_life_state():
 	BodySprite.play("death")
 	await BodySprite.animation_finished
-	queue_free()
 
 
 func connect_signals():
@@ -53,8 +52,7 @@ func _on_creature_died():
 	transition_to_life_state(LifeStates.DEAD)
 
 
-func take_damage(_damage: int):
-	assert(false, "Must implement take_damage func")
+
 
 
 
