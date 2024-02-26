@@ -126,6 +126,7 @@ func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
 func _on_melee_attack_area_body_exited(body: Node2D) -> void:
 	if body is PlayerController:
 		is_colliding_with_player = false
+		curr_movement_state = MovementStates.CHASING
 
 
 
