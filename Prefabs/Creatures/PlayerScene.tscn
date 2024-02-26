@@ -103,6 +103,7 @@ Weapon = NodePath("IronSword")
 
 [node name="IronSword" parent="Equipment" index="0" instance=ExtResource("4_rkwbu")]
 position = Vector2(11, 0)
+is_players_weapon = true
 
 [node name="WeaponCenterRef" type="Node2D" parent="." index="3"]
 position = Vector2(0, 5)

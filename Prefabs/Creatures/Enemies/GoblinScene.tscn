@@ -1,12 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://d0sqyad1wjbv0"]
+[gd_scene load_steps=23 format=3 uid="uid://d0sqyad1wjbv0"]
 
 [ext_resource type="PackedScene" uid="uid://bx6byxx416lxd" path="res://Prefabs/Creatures/Enemies/EnemySmallScene.tscn" id="1_x1c0s"]
-[ext_resource type="Script" path="res://Scripts/Creatures/Enemies/GoblinController.gd" id="2_ulcuw"]
 [ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_3xkvo"]
 [ext_resource type="PackedScene" uid="uid://dngfpjp7naisq" path="res://Prefabs/Weapons/WoodAxeScene.tscn" id="3_48em3"]
 [ext_resource type="Texture2D" uid="uid://dxb7ljqvcv01y" path="res://Tilesets/dungeonSprites_ v1.5/goblin_.png" id="3_hugt8"]
 
-[sub_resource type="Resource" id="Resource_wcpp8"]
+[sub_resource type="Resource" id="Resource_6vqnr"]
 script = ExtResource("3_3xkvo")
 max_health = 1
 curr_health = 1
@@ -147,11 +146,11 @@ animations = [{
 }]
 
 [node name="Goblin_0" instance=ExtResource("1_x1c0s")]
-script = ExtResource("2_ulcuw")
-swinging_attack_charging_up_speed = 0.0
-max_swinging_attack_charging_up_rotation = 0.0
-max_swinging_attack_release_rotation = 0.0
-stats = SubResource("Resource_wcpp8")
+swinging_attack_charging_up_speed = 2.0
+max_swinging_attack_charging_up_rotation = -0.785
+swinging_attack_release_speed = 10.0
+max_swinging_attack_release_rotation = 3.0
+stats = SubResource("Resource_6vqnr")
 
 [node name="BodySprite" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_544gu")

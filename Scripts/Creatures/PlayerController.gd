@@ -18,13 +18,14 @@ enum AttackingStates {
 
 @export var max_weap_dist_from_center_point: int
 
-
 var curr_movement_state: MovementStates
 var curr_attacking_state: AttackingStates
-var can_attack: bool = true
+var can_attack := true
+var can_take_damage := true
 
 
 func _ready():
+	super._ready()
 	transition_to_movement_state(MovementStates.IDLE)
 	transition_to_attacking_state(AttackingStates.IDLE)
 	connect_Equipment_signals()
@@ -43,7 +44,6 @@ func _input(_event: InputEvent):
 func handle_movement():
 	var input := Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
 	velocity = input * movement_speed
-	move_and_slide()
 	
 	if velocity != Vector2.ZERO:
 		transition_to_movement_state(MovementStates.MOVING)
@@ -82,6 +82,7 @@ func handle_idle_state():
 
 func handle_moving_state():
 	BodySprite.play("walk")
+	move_and_slide()
 
 
 func handle_attack_input():

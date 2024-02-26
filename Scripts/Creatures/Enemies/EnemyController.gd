@@ -8,23 +8,55 @@ enum MovementStates {
 	CHASING,
 }
 
+enum AttackStates {
+	IDLE,
+	ATTACKING,
+}
+
 
 @export var WeaponRefPointRight: Node2D
 @export var WeaponRefPointLeft: Node2D
+@export var MeleeAttackArea: Area2D
+
+@export var attack_speed_interval: float
+
+@export_group("Not used atm")
+@export var swinging_attack_charging_up_speed: float
+@export var max_swinging_attack_charging_up_rotation: float
+@export var swinging_attack_release_speed: float
+@export var max_swinging_attack_release_rotation: float
 
 var Player: PlayerController
 var curr_movement_state: MovementStates
+var curr_attack_state: AttackStates
+var can_hit_player := false
+var can_attack := true
+var is_colliding_with_player := false
 
 
 func _ready():
 	super._ready()
 	curr_movement_state = MovementStates.IDLE
+	curr_attack_state = AttackStates.IDLE
 
 
 func _physics_process(_delta: float) -> void:
-	if curr_life_state == LifeStates.DEAD:
+	if curr_life_state != LifeStates.ALIVE:
 		return
 	
+	handle_movement()
+
+
+func _process(_delta: float) -> void:
+	match curr_attack_state:
+		AttackStates.IDLE:
+			pass
+		
+		AttackStates.ATTACKING:
+			handle_attacking_attack_state()
+
+
+func handle_movement():
 	match curr_movement_state:
 		MovementStates.IDLE:
 			handle_idle_movement_state()
@@ -34,7 +66,7 @@ func _physics_process(_delta: float) -> void:
 			
 		MovementStates.CHASING:
 			handle_chasing_movement_state()
-	
+		
 	move_and_slide()
 
 
@@ -44,15 +76,10 @@ func handle_idle_movement_state():
 
 
 func handle_chasing_movement_state():
-	var dist_from_player := (position - Player.position).length()
 	var dir_to_player := (Player.position - position).normalized()
-	
-	if dist_from_player > 20:
-		velocity = dir_to_player * movement_speed
-	else:
-		curr_movement_state = MovementStates.IDLE
-	
 	var should_flip_h := true if dir_to_player.x < 0 else false
+	
+	velocity = dir_to_player * movement_speed
 	flip_sprites_horizontally(should_flip_h)
 	BodySprite.play("run")
 
@@ -65,19 +92,48 @@ func flip_sprites_horizontally(should_flip_h: bool):
 		WeaponRefPointRight.position)
 
 
+func handle_idle_attack_state():
+	can_attack = true
+
+
+func handle_attacking_attack_state():
+	if can_attack:
+		can_attack = false
+		Equipment.Weapon.curr_attack_state = WeaponController.AttackStates.CHARGE_UP
+
+
 func _on_AggroArea_body_entered(body: Node2D) -> void:
-	if check_if_is_player(body):
+	if body is PlayerController:
 		Player = body
 		curr_movement_state = MovementStates.CHASING
 
 
 func _on_AggroArea_body_exited(body: Node2D) -> void:
-	if check_if_is_player(body):
+	if body is PlayerController:
 		curr_movement_state = MovementStates.IDLE
 
 
-func check_if_is_player(body: Node2D) -> bool:
-	return true if (body.name as String).to_lower() == "player" else false
+func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
+	if body is PlayerController:
+		is_colliding_with_player = true
+		
+		while is_colliding_with_player:
+			curr_movement_state = MovementStates.IDLE
+			Player.stats.apply_damage(Equipment.Weapon.damage)
+			await get_tree().create_timer(attack_speed_interval).timeout
+
+
+func _on_melee_attack_area_body_exited(body: Node2D) -> void:
+	if body is PlayerController:
+		is_colliding_with_player = false
+
+
+
+
+
+
+
+
 
 
 

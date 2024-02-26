@@ -7,6 +7,7 @@
 script = ExtResource("1_vetry")
 BodySprite = NodePath("BodySprite")
 Equipment = NodePath("Equipment")
+movement_speed = 50
 
 [node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
 
