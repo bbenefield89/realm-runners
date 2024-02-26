@@ -10,4 +10,3 @@ position = Vector2(253, 132)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
 position = Vector2(169, 134)
-movement_speed = 10
