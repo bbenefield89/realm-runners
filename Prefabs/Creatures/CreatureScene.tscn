@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://Scripts/Equipment/EquipmentController.gd" id="1_hy7od"]
 [ext_resource type="Script" path="res://Scripts/Creatures/CreatureController.gd" id="1_vetry"]
 
-[node name="Creature" type="CharacterBody2D" node_paths=PackedStringArray("BodySprite", "Equipment")]
+[node name="Creature" type="CharacterBody2D" node_paths=PackedStringArray("BodyCollisionShape", "BodySprite", "Equipment")]
 script = ExtResource("1_vetry")
+BodyCollisionShape = NodePath("BodyCollisionShape")
 BodySprite = NodePath("BodySprite")
 Equipment = NodePath("Equipment")
 movement_speed = 50

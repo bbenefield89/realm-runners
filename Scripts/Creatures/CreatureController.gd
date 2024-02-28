@@ -8,6 +8,7 @@ enum LifeStates {
 }
 
 
+@export var BodyCollisionShape: CollisionShape2D
 @export var BodySprite: AnimatedSprite2D
 @export var Equipment: EquipmentController
 @export var stats: StatsResource
