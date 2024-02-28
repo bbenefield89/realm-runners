@@ -104,6 +104,8 @@ func handle_attacking_attack_state():
 
 
 func handle_dead_life_state():
+	BodyCollisionShape.set_deferred("disabled", true)
+	MeleeAttackArea.monitoring = false
 	await super.handle_dead_life_state()
 	queue_free()
 
