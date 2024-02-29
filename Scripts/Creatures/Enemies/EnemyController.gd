@@ -66,10 +66,7 @@ func handle_movement():
 			handle_chasing_movement_state()
 		
 		MovementStates.KNOCKED_BACK:
-			if KnockbackTimer.is_stopped():
-				var knockback_dir := (position - Player.position).normalized()
-				velocity = knockback_dir * knockback_speed
-				KnockbackTimer.start()
+			handle_knocked_back_movement_state()
 		
 	move_and_slide()
 
@@ -86,6 +83,13 @@ func handle_chasing_movement_state():
 	velocity = dir_to_player * movement_speed
 	flip_sprites_horizontally(should_flip_h)
 	BodySprite.play("run")
+
+
+func handle_knocked_back_movement_state():
+	if KnockbackTimer.is_stopped():
+		var knockback_dir := (position - Player.position).normalized()
+		velocity = knockback_dir * knockback_speed
+		KnockbackTimer.start()
 
 
 func flip_sprites_horizontally(should_flip_h: bool):
