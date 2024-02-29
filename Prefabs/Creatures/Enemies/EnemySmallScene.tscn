@@ -12,16 +12,14 @@ radius = 73.0069
 [sub_resource type="CircleShape2D" id="CircleShape2D_gq0en"]
 radius = 10.7703
 
-[node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft", "MeleeAttackArea", "MeleeAttackTimer") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
+[node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft", "MeleeAttackArea", "MeleeAttackTimer", "KnockbackTimer") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
 script = ExtResource("2_xhvld")
 WeaponRefPointRight = NodePath("WeaponRefPoints/Right")
 WeaponRefPointLeft = NodePath("WeaponRefPoints/Left")
 MeleeAttackArea = NodePath("MeleeAttackArea")
-MeleeAttackTimer = NodePath("MeleeAttackArea/MeleeAttackTimer")
-swinging_attack_charging_up_speed = 0.0
-max_swinging_attack_charging_up_rotation = 0.0
-swinging_attack_release_speed = 0.0
-max_swinging_attack_release_rotation = 0.0
+MeleeAttackTimer = NodePath("Timers/MeleeAttackTimer")
+KnockbackTimer = NodePath("Timers/KnockbackTimer")
+knockback_speed = 0.0
 
 [node name="BodyCollisionShape" parent="." index="0"]
 position = Vector2(0, 8)
@@ -47,10 +45,16 @@ position = Vector2(0, 4)
 [node name="MeleeAttackAreaCollisionShape" type="CollisionShape2D" parent="MeleeAttackArea" index="0"]
 shape = SubResource("CircleShape2D_gq0en")
 
-[node name="MeleeAttackTimer" type="Timer" parent="MeleeAttackArea" index="1"]
+[node name="Timers" type="Node" parent="." index="6"]
+
+[node name="KnockbackTimer" type="Timer" parent="Timers" index="0"]
+one_shot = true
+
+[node name="MeleeAttackTimer" type="Timer" parent="Timers" index="1"]
 
 [connection signal="body_entered" from="AggroArea" to="." method="_on_AggroArea_body_entered"]
 [connection signal="body_exited" from="AggroArea" to="." method="_on_AggroArea_body_exited"]
 [connection signal="body_entered" from="MeleeAttackArea" to="." method="_on_MeleeAttackArea_body_entered"]
 [connection signal="body_exited" from="MeleeAttackArea" to="." method="_on_melee_attack_area_body_exited"]
-[connection signal="timeout" from="MeleeAttackArea/MeleeAttackTimer" to="." method="_on_melee_attack_timer_timeout"]
+[connection signal="timeout" from="Timers/KnockbackTimer" to="." method="_on_knockback_timer_timeout"]
+[connection signal="timeout" from="Timers/MeleeAttackTimer" to="." method="_on_melee_attack_timer_timeout"]

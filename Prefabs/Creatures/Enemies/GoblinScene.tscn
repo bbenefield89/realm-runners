@@ -145,11 +145,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Goblin_0" instance=ExtResource("1_x1c0s")]
-swinging_attack_charging_up_speed = 2.0
-max_swinging_attack_charging_up_rotation = -0.785
-swinging_attack_release_speed = 10.0
-max_swinging_attack_release_rotation = 3.0
+[node name="Goblin_0" node_paths=PackedStringArray("AggroArea") instance=ExtResource("1_x1c0s")]
+AggroArea = NodePath("AggroArea")
+knockback_speed = 200.0
 stats = SubResource("Resource_6vqnr")
 
 [node name="BodySprite" parent="." index="1"]
@@ -167,3 +165,6 @@ position = Vector2(8, 0)
 
 [node name="Left" parent="WeaponRefPoints" index="1"]
 position = Vector2(-8, 0)
+
+[node name="KnockbackTimer" parent="Timers" index="0"]
+wait_time = 0.1

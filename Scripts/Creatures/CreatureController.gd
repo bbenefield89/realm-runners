@@ -53,6 +53,19 @@ func _on_creature_died():
 	transition_to_life_state(LifeStates.DEAD)
 
 
+func handle_taking_damage(damage: int):
+	stats.apply_damage(damage)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
