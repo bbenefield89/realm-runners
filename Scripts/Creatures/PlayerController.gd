@@ -152,13 +152,13 @@ func handle_dead_life_state():
 	get_tree().change_scene_to_file("res://Scenes/GameOverScene.tscn")
 
 
-func take_damage(damage: int):
+func handle_taking_damage(damage: int):
 	if can_take_damage:
 		can_take_damage = false
 		BodySprite.modulate = Color.RED
-		stats.apply_damage(damage)
 		DamageFlashTimer.start()
 		DamageTimeoutTimer.start()
+		super.handle_taking_damage(damage)
 
 
 func _on_damage_colors_timer_timeout() -> void:
@@ -176,7 +176,7 @@ func connect_Equipment_signals():
 
 
 func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
-	Enemy.stats.apply_damage(Equipment.Weapon.damage)
+	Enemy.handle_taking_damage(Equipment.Weapon.damage)
 
 
 

@@ -6,6 +6,7 @@ enum MovementStates {
 	IDLE,
 	WALKING,
 	CHASING,
+	KNOCKED_BACK,
 }
 
 enum AttackStates {
@@ -16,16 +17,12 @@ enum AttackStates {
 
 @export var WeaponRefPointRight: Node2D
 @export var WeaponRefPointLeft: Node2D
+@export var AggroArea: Area2D
 @export var MeleeAttackArea: Area2D
 @export var MeleeAttackTimer: Timer
+@export var KnockbackTimer: Timer
 
-#region Unused Weapon Vars
-@export_group("Not used atm")
-@export var swinging_attack_charging_up_speed: float
-@export var max_swinging_attack_charging_up_rotation: float
-@export var swinging_attack_release_speed: float
-@export var max_swinging_attack_release_rotation: float
-#endregion
+@export var knockback_speed: float
 
 var Player: PlayerController
 var curr_movement_state: MovementStates
@@ -63,10 +60,16 @@ func handle_movement():
 			handle_idle_movement_state()
 		
 		MovementStates.WALKING:
-			pass
+			assert(false, "WALKING not available yet")
 			
 		MovementStates.CHASING:
 			handle_chasing_movement_state()
+		
+		MovementStates.KNOCKED_BACK:
+			if KnockbackTimer.is_stopped():
+				var knockback_dir := (position - Player.position).normalized()
+				velocity = knockback_dir * knockback_speed
+				KnockbackTimer.start()
 		
 	move_and_slide()
 
@@ -110,6 +113,11 @@ func handle_dead_life_state():
 	queue_free()
 
 
+func handle_taking_damage(damage: int):
+	curr_movement_state = MovementStates.KNOCKED_BACK
+	super.handle_taking_damage(damage)
+
+
 func _on_AggroArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
 		Player = body
@@ -117,13 +125,13 @@ func _on_AggroArea_body_entered(body: Node2D) -> void:
 
 
 func _on_AggroArea_body_exited(body: Node2D) -> void:
-	if body is PlayerController:
+	if body is PlayerController and not curr_movement_state == MovementStates.KNOCKED_BACK:
 		curr_movement_state = MovementStates.IDLE
 
 
 func _on_MeleeAttackArea_body_entered(body: Node2D) -> void:
 	if body is PlayerController:
-		Player.take_damage(Equipment.Weapon.damage)
+		Player.handle_taking_damage(Equipment.Weapon.damage)
 		MeleeAttackTimer.start()
 
 
@@ -134,7 +142,14 @@ func _on_melee_attack_area_body_exited(body: Node2D) -> void:
 
 
 func _on_melee_attack_timer_timeout() -> void:
-	Player.take_damage(Equipment.Weapon.damage)
+	Player.handle_taking_damage(Equipment.Weapon.damage)
+
+
+func _on_knockback_timer_timeout() -> void:
+	var is_player_in_aggro_area := AggroArea.get_overlapping_bodies().any(func (body):
+		return body is PlayerController)
+	curr_movement_state = MovementStates.CHASING if is_player_in_aggro_area else MovementStates.IDLE
+
 
 
 
