@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c7asklokn48k2"]
+[gd_scene load_steps=22 format=3 uid="uid://c7asklokn48k2"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
@@ -116,6 +116,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qh2wi"]
+bg_color = Color(0.101961, 1, 0, 1)
+
 [node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer") instance=ExtResource("1_v82vv")]
 script = ExtResource("2_5dl5e")
 WeaponCenterRef = NodePath("WeaponCenterRef")
@@ -151,6 +154,10 @@ wait_time = 0.2
 
 [node name="DamageTimeoutTimer" type="Timer" parent="Timers" index="1"]
 one_shot = true
+
+[node name="HealthBar" parent="." index="5"]
+visible = true
+theme_override_styles/fill = SubResource("StyleBoxFlat_qh2wi")
 
 [connection signal="timeout" from="Timers/DamageFlashTimer" to="." method="_on_damage_colors_timer_timeout"]
 [connection signal="timeout" from="Timers/DamageTimeoutTimer" to="." method="_on_damage_timeout_timeout"]

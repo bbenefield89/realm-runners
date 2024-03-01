@@ -11,6 +11,7 @@ enum LifeStates {
 @export var BodyCollisionShape: CollisionShape2D
 @export var BodySprite: AnimatedSprite2D
 @export var Equipment: EquipmentController
+@export var HealthBar: ProgressBar
 @export var stats: StatsResource
 
 @export var movement_speed: int
@@ -23,6 +24,7 @@ func _ready():
 	stats.owner = self
 	transition_to_life_state(LifeStates.ALIVE)
 	connect_signals()
+	set_HealthBar_values()
 
 
 func transition_to_life_state(new_state: LifeStates):
@@ -55,6 +57,13 @@ func _on_creature_died():
 
 func handle_taking_damage(damage: int):
 	stats.apply_damage(damage)
+	HealthBar.visible = true
+	set_HealthBar_values()
+
+
+func set_HealthBar_values():
+	HealthBar.max_value = stats.max_health
+	HealthBar.value = stats.curr_health
 
 
 

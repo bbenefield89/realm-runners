@@ -1,13 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://dn22tsjujcpod"]
+[gd_scene load_steps=6 format=3 uid="uid://dn22tsjujcpod"]
 
 [ext_resource type="Script" path="res://Scripts/Equipment/EquipmentController.gd" id="1_hy7od"]
 [ext_resource type="Script" path="res://Scripts/Creatures/CreatureController.gd" id="1_vetry"]
 
-[node name="Creature" type="CharacterBody2D" node_paths=PackedStringArray("BodyCollisionShape", "BodySprite", "Equipment")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e0i84"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba2ga"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_l02sv"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_e0i84")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ba2ga")
+
+[node name="Creature" type="CharacterBody2D" node_paths=PackedStringArray("BodyCollisionShape", "BodySprite", "Equipment", "HealthBar")]
 script = ExtResource("1_vetry")
 BodyCollisionShape = NodePath("BodyCollisionShape")
 BodySprite = NodePath("BodySprite")
 Equipment = NodePath("Equipment")
+HealthBar = NodePath("HealthBar")
 movement_speed = 50
 
 [node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
@@ -17,3 +28,14 @@ texture_filter = 1
 
 [node name="Equipment" type="Node2D" parent="."]
 script = ExtResource("1_hy7od")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -7.0
+offset_top = 15.0
+offset_right = 7.0
+offset_bottom = 17.0
+theme = SubResource("Theme_l02sv")
+step = 1.0
+value = 75.0
+show_percentage = false
