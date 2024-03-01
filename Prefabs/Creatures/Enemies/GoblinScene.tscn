@@ -7,8 +7,8 @@
 
 [sub_resource type="Resource" id="Resource_6vqnr"]
 script = ExtResource("3_3xkvo")
-max_health = 1
-curr_health = 1
+max_health = 10
+curr_health = 10
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ysb86"]
 atlas = ExtResource("3_hugt8")
@@ -145,8 +145,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Goblin_0" node_paths=PackedStringArray("AggroArea") instance=ExtResource("1_x1c0s")]
-AggroArea = NodePath("AggroArea")
+[node name="Goblin_0" instance=ExtResource("1_x1c0s")]
 knockback_speed = 200.0
 stats = SubResource("Resource_6vqnr")
 

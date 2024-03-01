@@ -10,3 +10,12 @@ position = Vector2(253, 132)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
 position = Vector2(336, 133)
+
+[node name="Goblin_1" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(178, 110)
+
+[node name="Goblin_2" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(174, 134)
+
+[node name="Goblin_3" parent="." instance=ExtResource("2_81uar")]
+position = Vector2(184, 161)
