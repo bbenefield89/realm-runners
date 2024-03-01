@@ -21,6 +21,7 @@ enum AttackStates {
 @export var MeleeAttackArea: Area2D
 @export var MeleeAttackTimer: Timer
 @export var KnockbackTimer: Timer
+@export var HealthBar: ProgressBar
 
 @export var knockback_speed: float
 
@@ -36,6 +37,7 @@ func _ready():
 	super._ready()
 	curr_movement_state = MovementStates.IDLE
 	curr_attack_state = AttackStates.IDLE
+	set_HealthBar_values()
 
 
 func _physics_process(_delta: float) -> void:
@@ -120,6 +122,13 @@ func handle_dead_life_state():
 func handle_taking_damage(damage: int):
 	curr_movement_state = MovementStates.KNOCKED_BACK
 	super.handle_taking_damage(damage)
+	HealthBar.visible = true
+	set_HealthBar_values()
+
+
+func set_HealthBar_values():
+	HealthBar.max_value = stats.max_health
+	HealthBar.value = stats.curr_health
 
 
 func _on_AggroArea_body_entered(body: Node2D) -> void:

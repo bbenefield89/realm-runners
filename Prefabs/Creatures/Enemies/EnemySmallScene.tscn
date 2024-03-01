@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bx6byxx416lxd"]
+[gd_scene load_steps=9 format=3 uid="uid://bx6byxx416lxd"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_f8q2g"]
 [ext_resource type="Script" path="res://Scripts/Creatures/Enemies/EnemyController.gd" id="2_xhvld"]
@@ -12,13 +12,25 @@ radius = 73.0069
 [sub_resource type="CircleShape2D" id="CircleShape2D_gq0en"]
 radius = 10.7703
 
-[node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft", "MeleeAttackArea", "MeleeAttackTimer", "KnockbackTimer") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e0i84"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba2ga"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_0oh7w"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_e0i84")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ba2ga")
+
+[node name="EnemySmall" node_paths=PackedStringArray("WeaponRefPointRight", "WeaponRefPointLeft", "AggroArea", "MeleeAttackArea", "MeleeAttackTimer", "KnockbackTimer", "HealthBar") groups=["Enemy"] instance=ExtResource("1_f8q2g")]
 script = ExtResource("2_xhvld")
 WeaponRefPointRight = NodePath("WeaponRefPoints/Right")
 WeaponRefPointLeft = NodePath("WeaponRefPoints/Left")
+AggroArea = NodePath("AggroArea")
 MeleeAttackArea = NodePath("MeleeAttackArea")
 MeleeAttackTimer = NodePath("Timers/MeleeAttackTimer")
 KnockbackTimer = NodePath("Timers/KnockbackTimer")
+HealthBar = NodePath("HealthBar")
 knockback_speed = 0.0
 
 [node name="BodyCollisionShape" parent="." index="0"]
@@ -51,6 +63,17 @@ shape = SubResource("CircleShape2D_gq0en")
 one_shot = true
 
 [node name="MeleeAttackTimer" type="Timer" parent="Timers" index="1"]
+
+[node name="HealthBar" type="ProgressBar" parent="." index="7"]
+visible = false
+offset_left = -7.0
+offset_top = 15.0
+offset_right = 7.0
+offset_bottom = 17.0
+theme = SubResource("Theme_0oh7w")
+step = 1.0
+value = 75.0
+show_percentage = false
 
 [connection signal="body_entered" from="AggroArea" to="." method="_on_AggroArea_body_entered"]
 [connection signal="body_exited" from="AggroArea" to="." method="_on_AggroArea_body_exited"]
