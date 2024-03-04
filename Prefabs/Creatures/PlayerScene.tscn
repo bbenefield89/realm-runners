@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://c7asklokn48k2"]
+[gd_scene load_steps=23 format=3 uid="uid://c7asklokn48k2"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
 [ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="2_evd7d"]
 [ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_61y5n"]
 [ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/IronSwordScene.tscn" id="4_rkwbu"]
+[ext_resource type="PackedScene" uid="uid://xdg1k5csd08b" path="res://Prefabs/Inventory/InventoryButton.tscn" id="6_s47rb"]
 
 [sub_resource type="Resource" id="Resource_b272u"]
 script = ExtResource("3_61y5n")
@@ -119,11 +120,14 @@ animations = [{
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qh2wi"]
 bg_color = Color(0.101961, 1, 0, 1)
 
-[node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer") instance=ExtResource("1_v82vv")]
+[node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer", "InventoryUi", "InventoryEquipment", "InventoryContents") instance=ExtResource("1_v82vv")]
 script = ExtResource("2_5dl5e")
 WeaponCenterRef = NodePath("WeaponCenterRef")
 DamageFlashTimer = NodePath("Timers/DamageFlashTimer")
 DamageTimeoutTimer = NodePath("Timers/DamageTimeoutTimer")
+InventoryUi = NodePath("InventoryUi")
+InventoryEquipment = NodePath("InventoryUi/Equipment")
+InventoryContents = NodePath("InventoryUi/InventoryContents")
 max_weap_dist_from_center_point = 15
 max_damage_flash_time = 0.0
 stats = SubResource("Resource_b272u")
@@ -144,20 +148,162 @@ Weapon = NodePath("IronSword")
 position = Vector2(11, 0)
 is_players_weapon = true
 
-[node name="WeaponCenterRef" type="Node2D" parent="." index="3"]
+[node name="HealthBar" parent="." index="3"]
+visible = true
+theme_override_styles/fill = SubResource("StyleBoxFlat_qh2wi")
+
+[node name="Camera2D" type="Camera2D" parent="." index="4"]
+
+[node name="InventoryUi" type="Control" parent="." index="5"]
+process_mode = 3
+visible = false
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Equipment" type="GridContainer" parent="InventoryUi" index="0"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -98.0
+offset_right = 40.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 3
+
+[node name="Button" parent="InventoryUi/Equipment" index="0" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUi/Equipment" index="1" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUi/Equipment" index="2" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUi/Equipment" index="3" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUi/Equipment" index="4" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button6" parent="InventoryUi/Equipment" index="5" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button7" parent="InventoryUi/Equipment" index="6" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button8" parent="InventoryUi/Equipment" index="7" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button9" parent="InventoryUi/Equipment" index="8" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="InventoryContents" type="GridContainer" parent="InventoryUi" index="1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -166.0
+offset_top = 32.0
+offset_right = 166.0
+offset_bottom = 84.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 12
+
+[node name="Button" parent="InventoryUi/InventoryContents" index="0" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUi/InventoryContents" index="1" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUi/InventoryContents" index="2" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUi/InventoryContents" index="3" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUi/InventoryContents" index="4" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button6" parent="InventoryUi/InventoryContents" index="5" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button7" parent="InventoryUi/InventoryContents" index="6" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button8" parent="InventoryUi/InventoryContents" index="7" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button9" parent="InventoryUi/InventoryContents" index="8" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button10" parent="InventoryUi/InventoryContents" index="9" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button11" parent="InventoryUi/InventoryContents" index="10" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button12" parent="InventoryUi/InventoryContents" index="11" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button13" parent="InventoryUi/InventoryContents" index="12" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button14" parent="InventoryUi/InventoryContents" index="13" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button15" parent="InventoryUi/InventoryContents" index="14" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button16" parent="InventoryUi/InventoryContents" index="15" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button17" parent="InventoryUi/InventoryContents" index="16" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button18" parent="InventoryUi/InventoryContents" index="17" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button19" parent="InventoryUi/InventoryContents" index="18" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button20" parent="InventoryUi/InventoryContents" index="19" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button21" parent="InventoryUi/InventoryContents" index="20" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button22" parent="InventoryUi/InventoryContents" index="21" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button23" parent="InventoryUi/InventoryContents" index="22" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="Button24" parent="InventoryUi/InventoryContents" index="23" instance=ExtResource("6_s47rb")]
+layout_mode = 2
+
+[node name="WeaponCenterRef" type="Node2D" parent="." index="6"]
 position = Vector2(0, 5)
 
-[node name="Timers" type="Node" parent="." index="4"]
+[node name="Timers" type="Node" parent="." index="7"]
 
 [node name="DamageFlashTimer" type="Timer" parent="Timers" index="0"]
 wait_time = 0.2
 
 [node name="DamageTimeoutTimer" type="Timer" parent="Timers" index="1"]
 one_shot = true
-
-[node name="HealthBar" parent="." index="5"]
-visible = true
-theme_override_styles/fill = SubResource("StyleBoxFlat_qh2wi")
 
 [connection signal="timeout" from="Timers/DamageFlashTimer" to="." method="_on_damage_colors_timer_timeout"]
 [connection signal="timeout" from="Timers/DamageTimeoutTimer" to="." method="_on_damage_timeout_timeout"]
