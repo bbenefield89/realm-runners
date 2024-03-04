@@ -15,9 +15,21 @@ enum AttackingStates {
 }
 
 
+class InventorySignalData:
+	var node: GridContainer
+	var callable: Callable
+	
+	func _init(_node: GridContainer, _callable: Callable):
+		node = _node
+		callable = _callable
+
+
 @export var WeaponCenterRef: Node2D
 @export var DamageFlashTimer: Timer
 @export var DamageTimeoutTimer: Timer
+@export var InventoryUi: Control
+@export var InventoryEquipment: GridContainer
+@export var InventoryContents: GridContainer
 
 @export var max_weap_dist_from_center_point: int
 @export var max_damage_flash_time: float
@@ -33,7 +45,6 @@ func _ready():
 	super._ready()
 	transition_to_movement_state(MovementStates.IDLE)
 	transition_to_attacking_state(AttackingStates.IDLE)
-	connect_Equipment_signals()
 
 
 func _physics_process(_delta: float):
@@ -44,6 +55,40 @@ func _physics_process(_delta: float):
 func _input(_event: InputEvent):
 	handle_attack_input()
 	handle_BodySprite_facing_direction()
+	handle_toggle_inventory()
+
+
+func connect_signals(): # Called from CreatureController
+	connect_Equipment_signals()
+	connect_Inventory_signals([
+		InventorySignalData.new(InventoryEquipment, _on_EquipmentBtn_pressed),
+		InventorySignalData.new(InventoryContents, _on_InventoryContentBtn_pressed)])
+
+
+func connect_Equipment_signals():
+	Equipment.Weapon.weapon_hit_enemy.connect(_on_IronSword_weapon_hit_enemy)
+
+
+func connect_Inventory_signals(inv_signals: Array[InventorySignalData]):
+	for i in inv_signals.size():
+		var InvContainer := inv_signals[i].node as GridContainer
+		var callable := inv_signals[i].callable as Callable
+		
+		for child in InvContainer.get_children():
+			var Btn := child as Button
+			Btn.pressed.connect(callable)
+
+
+func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
+	Enemy.handle_taking_damage(Equipment.Weapon.damage)
+
+
+func _on_EquipmentBtn_pressed():
+	print("Equipment Button Pressed")
+
+
+func _on_InventoryContentBtn_pressed():
+	print("Inventory Content Button Pressed")
 
 
 func handle_movement():
@@ -72,6 +117,12 @@ func handle_WeaponSprite_movement():
 func handle_BodySprite_facing_direction():
 	var curr_cursor_pos := get_viewport().get_mouse_position()
 	BodySprite.flip_h = true if curr_cursor_pos.x - position.x < 0 else false
+
+
+func handle_toggle_inventory():
+	if Input.is_action_just_pressed("inventory_toggle"):
+		var is_inventory_visible = InventoryUi.visible
+		InventoryUi.visible = false if is_inventory_visible else true
 
 
 func transition_to_movement_state(new_state: MovementStates):
@@ -170,13 +221,6 @@ func _on_damage_timeout_timeout() -> void:
 	BodySprite.modulate = Color.WHITE
 	DamageFlashTimer.stop()
 
-
-func connect_Equipment_signals():
-	Equipment.Weapon.weapon_hit_enemy.connect(_on_IronSword_weapon_hit_enemy)
-
-
-func _on_IronSword_weapon_hit_enemy(Enemy: CreatureController) -> void:
-	Enemy.handle_taking_damage(Equipment.Weapon.damage)
 
 
 
