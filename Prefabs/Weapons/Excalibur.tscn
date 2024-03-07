@@ -1,42 +1,42 @@
 [gd_scene load_steps=14 format=3 uid="uid://cant84ai23x4s"]
 
-[ext_resource type="PackedScene" uid="uid://cco617ejyaaci" path="res://Prefabs/Weapons/WeaponScene.tscn" id="1_12qwv"]
-[ext_resource type="Texture2D" uid="uid://b7mrdfrx3ker0" path="res://Tilesets/camelot_ [version 1.0]/excalibur_.png" id="2_ehqam"]
+[ext_resource type="PackedScene" uid="uid://cco617ejyaaci" path="res://Prefabs/Weapons/WeaponScene.tscn" id="1_ihj7v"]
+[ext_resource type="Texture2D" uid="uid://b7mrdfrx3ker0" path="res://Tilesets/camelot_ [version 1.0]/excalibur_.png" id="2_ux174"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2mbth"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3x3ll"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(0, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yvhcy"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(32, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hjbwp"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(64, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v0wx"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(96, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xb3iw"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ajt2"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g4bgd"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(64, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cbxhj"]
-atlas = ExtResource("2_ehqam")
+atlas = ExtResource("2_ux174")
 region = Rect2(96, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8vrcs"]
@@ -87,10 +87,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7v1do"]
 size = Vector2(6, 20)
 
-[node name="IronSword_0" instance=ExtResource("1_12qwv")]
+[node name="Excalibur" instance=ExtResource("1_ihj7v")]
 sprite_frames = SubResource("SpriteFrames_8vrcs")
 animation = &"idle"
-menu_name = "Iron Sword"
+menu_name = "Excalibur"
 damage = 5
 
 [node name="WeaponCollisionShape" parent="WeaponCollisionArea" index="0"]

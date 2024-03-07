@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsdln0cg2rh46"]
+
+[ext_resource type="PackedScene" uid="uid://caxmga3v0m6ri" path="res://Prefabs/Inventory/ItemScene.tscn" id="1_e685p"]
+[ext_resource type="Texture2D" uid="uid://b7mrdfrx3ker0" path="res://Tilesets/camelot_ [version 1.0]/excalibur_.png" id="2_y078h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_omr5i"]
+size = Vector2(8, 20)
+
+[node name="Excalibur" instance=ExtResource("1_e685p")]
+texture = ExtResource("2_y078h")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource("RectangleShape2D_omr5i")

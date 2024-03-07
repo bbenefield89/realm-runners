@@ -1,23 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckcuv1p4x4vox"]
+[gd_scene load_steps=5 format=3 uid="uid://ckcuv1p4x4vox"]
 
 [ext_resource type="Script" path="res://Scenes/SceneController.gd" id="1_kjq2c"]
 [ext_resource type="PackedScene" uid="uid://c7asklokn48k2" path="res://Prefabs/Creatures/PlayerScene.tscn" id="1_mop1v"]
 [ext_resource type="PackedScene" uid="uid://d0sqyad1wjbv0" path="res://Prefabs/Creatures/Enemies/GoblinScene.tscn" id="2_81uar"]
+[ext_resource type="PackedScene" uid="uid://bsdln0cg2rh46" path="res://Prefabs/Inventory/Weapons/Excalibur.tscn" id="4_s1vfx"]
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_kjq2c")
 
+[node name="Excalibur" parent="." instance=ExtResource("4_s1vfx")]
+position = Vector2(230, 131)
+
 [node name="Player" parent="." instance=ExtResource("1_mop1v")]
-position = Vector2(253, 132)
+position = Vector2(181, 125)
 
 [node name="Goblin_0" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(336, 133)
+position = Vector2(482, 24)
 
 [node name="Goblin_1" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(176, 67)
+position = Vector2(55, 12)
 
 [node name="Goblin_2" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(161, 99)
+position = Vector2(40, 44)
 
 [node name="Goblin_3" parent="." instance=ExtResource("2_81uar")]
-position = Vector2(155, 129)
+position = Vector2(34, 74)

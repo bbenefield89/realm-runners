@@ -1,10 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://c7asklokn48k2"]
+[gd_scene load_steps=24 format=3 uid="uid://c7asklokn48k2"]
 
 [ext_resource type="PackedScene" uid="uid://dn22tsjujcpod" path="res://Prefabs/Creatures/CreatureScene.tscn" id="1_v82vv"]
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
 [ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="2_evd7d"]
 [ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_61y5n"]
-[ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/IronSwordScene.tscn" id="4_rkwbu"]
+[ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/Excalibur.tscn" id="4_rkwbu"]
 [ext_resource type="PackedScene" uid="uid://xdg1k5csd08b" path="res://Prefabs/Inventory/InventoryButton.tscn" id="6_s47rb"]
 
 [sub_resource type="Resource" id="Resource_b272u"]
@@ -120,7 +120,10 @@ animations = [{
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qh2wi"]
 bg_color = Color(0.101961, 1, 0, 1)
 
-[node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer", "InventoryUi", "InventoryEquipment", "InventoryContents") instance=ExtResource("1_v82vv")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_qbcsn"]
+radius = 17.0
+
+[node name="Player" node_paths=PackedStringArray("WeaponCenterRef", "DamageFlashTimer", "DamageTimeoutTimer", "InventoryUi", "InventoryEquipment", "InventoryContents", "ItemPickupArea") instance=ExtResource("1_v82vv")]
 script = ExtResource("2_5dl5e")
 WeaponCenterRef = NodePath("WeaponCenterRef")
 DamageFlashTimer = NodePath("Timers/DamageFlashTimer")
@@ -128,6 +131,7 @@ DamageTimeoutTimer = NodePath("Timers/DamageTimeoutTimer")
 InventoryUi = NodePath("InventoryUi")
 InventoryEquipment = NodePath("InventoryUi/Equipment")
 InventoryContents = NodePath("InventoryUi/InventoryContents")
+ItemPickupArea = NodePath("ItemPickupArea")
 max_weap_dist_from_center_point = 15
 max_damage_flash_time = 0.0
 stats = SubResource("Resource_b272u")
@@ -142,9 +146,9 @@ sprite_frames = SubResource("SpriteFrames_ayewj")
 animation = &"death"
 
 [node name="Equipment" parent="." index="2" node_paths=PackedStringArray("Weapon")]
-Weapon = NodePath("IronSword")
+Weapon = NodePath("Excalibur")
 
-[node name="IronSword" parent="Equipment" index="0" instance=ExtResource("4_rkwbu")]
+[node name="Excalibur" parent="Equipment" index="0" instance=ExtResource("4_rkwbu")]
 position = Vector2(11, 0)
 is_players_weapon = true
 
@@ -305,5 +309,12 @@ wait_time = 0.2
 [node name="DamageTimeoutTimer" type="Timer" parent="Timers" index="1"]
 one_shot = true
 
+[node name="ItemPickupArea" type="Area2D" parent="." index="8"]
+position = Vector2(0, 5)
+
+[node name="ItemPickupCollisionShape" type="CollisionShape2D" parent="ItemPickupArea" index="0"]
+shape = SubResource("CircleShape2D_qbcsn")
+
 [connection signal="timeout" from="Timers/DamageFlashTimer" to="." method="_on_damage_colors_timer_timeout"]
 [connection signal="timeout" from="Timers/DamageTimeoutTimer" to="." method="_on_damage_timeout_timeout"]
+[connection signal="area_entered" from="ItemPickupArea" to="." method="_on_item_pickup_area_area_entered"]

@@ -30,6 +30,7 @@ class InventorySignalData:
 @export var InventoryUi: Control
 @export var InventoryEquipment: GridContainer
 @export var InventoryContents: GridContainer
+@export var ItemPickupArea: Area2D
 
 @export var max_weap_dist_from_center_point: int
 @export var max_damage_flash_time: float
@@ -220,6 +221,13 @@ func _on_damage_timeout_timeout() -> void:
 	can_take_damage = true
 	BodySprite.modulate = Color.WHITE
 	DamageFlashTimer.stop()
+
+
+func _on_item_pickup_area_area_entered(area: Area2D) -> void:
+	if area.get_parent() is ItemController:
+		print("Item found")
+
+
 
 
 
