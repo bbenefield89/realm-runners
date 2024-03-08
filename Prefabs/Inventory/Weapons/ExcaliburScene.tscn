@@ -9,7 +9,7 @@ size = Vector2(8, 20)
 [node name="Excalibur" instance=ExtResource("1_e685p")]
 texture = ExtResource("2_y078h")
 region_enabled = true
-region_rect = Rect2(0, 0, 32, 32)
+region_rect = Rect2(10, 4, 12, 24)
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 shape = SubResource("RectangleShape2D_omr5i")

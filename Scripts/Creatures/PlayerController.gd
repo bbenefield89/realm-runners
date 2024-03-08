@@ -40,6 +40,7 @@ var curr_attacking_state: AttackingStates
 var can_attack := true
 var can_take_damage := true
 var total_time_damage_flashing := 0.0
+var lootable_items: Array[ItemController] = []
 
 
 func _ready():
@@ -57,6 +58,7 @@ func _input(_event: InputEvent):
 	handle_attack_input()
 	handle_BodySprite_facing_direction()
 	handle_toggle_inventory()
+	handle_loot_input()
 
 
 func connect_signals(): # Called from CreatureController
@@ -124,6 +126,25 @@ func handle_toggle_inventory():
 	if Input.is_action_just_pressed("inventory_toggle"):
 		var is_inventory_visible = InventoryUi.visible
 		InventoryUi.visible = false if is_inventory_visible else true
+
+
+func handle_loot_input():
+	if Input.is_action_just_pressed("interact"):
+		if lootable_items.size() == 1:
+			loot_item(lootable_items[0])
+		elif lootable_items.size() > 1:
+			assert(false, "Must implement multi-item looting")
+
+
+func loot_item(item_to_loot: ItemController):
+	var EmptyInvSlots = InventoryContents.get_children().filter(func (child):
+		return child.get_node("Sprite2D").texture == null)
+		
+	if EmptyInvSlots.size() > 0:
+		var EmptyInvSlotSprite := EmptyInvSlots[0].get_node("Sprite2D") as Sprite2D
+		EmptyInvSlotSprite.texture = item_to_loot.texture
+		EmptyInvSlotSprite.region_rect = item_to_loot.region_rect
+		item_to_loot.queue_free()
 
 
 func transition_to_movement_state(new_state: MovementStates):
@@ -225,7 +246,15 @@ func _on_damage_timeout_timeout() -> void:
 
 func _on_item_pickup_area_area_entered(area: Area2D) -> void:
 	if area.get_parent() is ItemController:
-		print("Item found")
+		lootable_items.append(area.get_parent())
+
+
+func _on_item_pickup_area_area_exited(area: Area2D) -> void:
+	if area.get_parent() is ItemController:
+		var item_idx := lootable_items.find(area.get_parent())
+		lootable_items.remove_at(item_idx)
+
+
 
 
 

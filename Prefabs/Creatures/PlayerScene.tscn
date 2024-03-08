@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/Creatures/PlayerController.gd" id="2_5dl5e"]
 [ext_resource type="Texture2D" uid="uid://mm1ciyi7xriq" path="res://Tilesets/dungeonSprites_ v1.5/knight_.png" id="2_evd7d"]
 [ext_resource type="Script" path="res://Scripts/Stats/StatsResource.gd" id="3_61y5n"]
-[ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/Excalibur.tscn" id="4_rkwbu"]
+[ext_resource type="PackedScene" uid="uid://cant84ai23x4s" path="res://Prefabs/Weapons/ExcaliburScene.tscn" id="4_rkwbu"]
 [ext_resource type="PackedScene" uid="uid://xdg1k5csd08b" path="res://Prefabs/Inventory/InventoryButton.tscn" id="6_s47rb"]
 
 [sub_resource type="Resource" id="Resource_b272u"]
@@ -318,3 +318,4 @@ shape = SubResource("CircleShape2D_qbcsn")
 [connection signal="timeout" from="Timers/DamageFlashTimer" to="." method="_on_damage_colors_timer_timeout"]
 [connection signal="timeout" from="Timers/DamageTimeoutTimer" to="." method="_on_damage_timeout_timeout"]
 [connection signal="area_entered" from="ItemPickupArea" to="." method="_on_item_pickup_area_area_entered"]
+[connection signal="area_exited" from="ItemPickupArea" to="." method="_on_item_pickup_area_area_exited"]
