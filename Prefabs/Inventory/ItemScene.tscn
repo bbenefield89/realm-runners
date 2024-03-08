@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://caxmga3v0m6ri"]
+
+[ext_resource type="Script" path="res://Scripts/Items/ItemController.gd" id="1_bgots"]
+
+[node name="ItemScene" type="Sprite2D"]
+texture_filter = 1
+script = ExtResource("1_bgots")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4htthyc0v4vi"]
+
+[ext_resource type="PackedScene" uid="uid://caxmga3v0m6ri" path="res://Prefabs/Inventory/ItemScene.tscn" id="1_w5os0"]
+[ext_resource type="Texture2D" uid="uid://d24ct6bm7q7bh" path="res://Tilesets/dungeonSprites_ v1.5/weapons_.png" id="2_u83oi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1eng6"]
+size = Vector2(9, 20)
+
+[node name="WoodAxeScene" instance=ExtResource("1_w5os0")]
+texture = ExtResource("2_u83oi")
+region_enabled = true
+region_rect = Rect2(0, 24, 12, 24)
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(1.5, 0)
+shape = SubResource("RectangleShape2D_1eng6")
